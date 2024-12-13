@@ -11,5 +11,5 @@ public interface ProductService {
 
     Product getSingleProduct(long id);
 
-    void createProduct(CreateProductDTO createProductDTO);
+    Product createProduct(CreateProductDTO createProductDTO);
 }

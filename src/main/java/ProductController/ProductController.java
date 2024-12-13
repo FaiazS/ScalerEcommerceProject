@@ -2,10 +2,7 @@ package ProductController;
 
 import ProductDataTransferObject.CreateProductDTO;
 import ProductModels.Product;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import services.ProductService;
 import java.util.List;
 
@@ -19,7 +16,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-      //Getting all products
+      //Getting All products
 
     @GetMapping("/products")
 
@@ -28,7 +25,8 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-    // Getting ID of a Single Product
+    // Getting ID of A Single Product
+
     @GetMapping("/products/{id}")
 
     public Product getSingleProduct(@PathVariable("id") long id){
@@ -36,12 +34,19 @@ public class ProductController {
         return productService.getSingleProduct(id);
     }
 
-    // Create a new Product
+    // Creating or Adding  a new Product
+
+    // All Create Product methods should be void ,
+
+    //however we are giving return type Product for Testing purposes  to
+
+    // see if the method is working as intended
+
     @PostMapping("/products/")
 
-    public void createProduct(CreateProductDTO createProductDTO){
+    public Product createProduct(@RequestBody()CreateProductDTO createProductDTO){
 
-        productService.createProduct(createProductDTO);
+        return productService.createProduct(createProductDTO);
 
     }
 }

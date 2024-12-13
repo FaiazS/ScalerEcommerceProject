@@ -8,6 +8,7 @@ import RESTConfigurations.RESTTemplates;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,27 +24,53 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
 
+    // Retrieving the list of all Products in Catalogue
+
     public List<Product> getAllProducts(){
 
-        return List.of();
+        FakeStoreProductDTO fakeStoreProductDTOtoArray [] = restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreProductDTO[].class);
 
+        List<Product> Products = new ArrayList<>();
+
+        for(FakeStoreProductDTO fakeStoreProductDTO : fakeStoreProductDTOtoArray){
+
+            Product product = fakeStoreProductDTO.toProduct();
+
+            Products.add(product);
+        }
+        return Products;
     }
 
-    // Calling Third Party API
+    // Retrieving a Single Product from the Catalogue
 
     public Product getProductById(long id){
 
-        FakeStoreProductDTO fakeStoreProductDTO = RestTemplate.getForObject("https://fakestoreapi.com/products/", FakeStoreProductDTO.class);
+        FakeStoreProductDTO fakeStoreProductDTO = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDTO.class);
 
         return fakeStoreProductDTO.toProduct();
     }
 
     @Override
 
-    // Default Constructor
+    //Creating a New Product || Adding a New Product in Catalogue
 
-    public void CreateProduct(CreateProductDTO createProductDTO){
+    public Product CreateProduct(CreateProductDTO createProductDTO){
 
+        FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
+
+        fakeStoreProductDTO.setTitle(createProductDTO.getTitle());
+
+        fakeStoreProductDTO.setDescription(createProductDTO.getDescription());
+
+        fakeStoreProductDTO.setPrice(createProductDTO.getPrice());
+
+        fakeStoreProductDTO.setCategory(createProductDTO.getCategory());
+
+        fakeStoreProductDTO.setImage(createProductDTO.getImage());
+
+        FakeStoreProductDTO testFakeStoreProductDTO = restTemplate.postForObject("https://fakestoreapi.com/products", fakeStoreProductDTO, fakeStoreProductDTO.class);
+
+        return testFakeStoreProductDTO.toProduct();
 
     }
 }
