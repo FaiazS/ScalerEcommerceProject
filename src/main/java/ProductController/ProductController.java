@@ -1,7 +1,8 @@
 package ProductController;
 
-import ProductDataTransferObject.CreateProductDTO;
+import ProductDataTransferObject.AddProductDTO;
 import ProductModels.Product;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import services.ProductService;
 import java.util.List;
@@ -11,7 +12,7 @@ public class ProductController {
 
     private ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier"SelfProductService") ProductService productService) {
 
         this.productService = productService;
     }
@@ -34,7 +35,7 @@ public class ProductController {
         return productService.getSingleProduct(id);
     }
 
-    // Creating or Adding  a new Product
+    // Adding a new Product
 
     // All Create Product methods should be void ,
 
@@ -44,9 +45,9 @@ public class ProductController {
 
     @PostMapping("/products/")
 
-    public Product createProduct(@RequestBody()CreateProductDTO createProductDTO){
+    public Product addProduct(@RequestBody() AddProductDTO addProductDTO){
 
-        return productService.createProduct(createProductDTO);
+        return productService.addProduct(addProductDTO);
 
     }
 }

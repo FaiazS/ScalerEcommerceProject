@@ -1,15 +1,18 @@
 package services;
 
-import ProductDataTransferObject.CreateProductDTO;
+import ProductDataTransferObject.AddProductDTO;
 import ProductModels.Product;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface ProductService {
 
     List<Product> getAllProducts();
 
     Product getSingleProduct(long id);
 
-    Product createProduct(CreateProductDTO createProductDTO);
+    Product addProduct(AddProductDTO addProductDTO);
+
 }

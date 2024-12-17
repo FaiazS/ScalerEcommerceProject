@@ -1,6 +1,6 @@
 package services;
 
-import ProductDataTransferObject.CreateProductDTO;
+import ProductDataTransferObject.AddProductDTO;
 import ProductDataTransferObject.FakeStoreProductDTO;
 import ProductModels.Product;
 import org.springframework.stereotype.Service;
@@ -52,21 +52,21 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
 
-    //Creating a New Product || Adding a New Product in Catalogue
+    //Adding a New Product in Catalogue
 
-    public Product CreateProduct(CreateProductDTO createProductDTO){
+    public Product addProduct(AddProductDTO addProductDTO){
 
         FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
 
-        fakeStoreProductDTO.setTitle(createProductDTO.getTitle());
+        fakeStoreProductDTO.setTitle(addProductDTO.getTitle());
 
-        fakeStoreProductDTO.setDescription(createProductDTO.getDescription());
+        fakeStoreProductDTO.setDescription(addProductDTO.getDescription());
 
-        fakeStoreProductDTO.setPrice(createProductDTO.getPrice());
+        fakeStoreProductDTO.setPrice(addProductDTO.getPrice());
 
-        fakeStoreProductDTO.setCategory(createProductDTO.getCategory());
+        fakeStoreProductDTO.setCategory(addProductDTO.getCategory());
 
-        fakeStoreProductDTO.setImage(createProductDTO.getImage());
+        fakeStoreProductDTO.setImage(addProductDTO.getImage());
 
         FakeStoreProductDTO testFakeStoreProductDTO = restTemplate.postForObject("https://fakestoreapi.com/products", fakeStoreProductDTO, fakeStoreProductDTO.class);
 
