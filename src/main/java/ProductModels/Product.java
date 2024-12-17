@@ -15,7 +15,7 @@ import org.hibernate.annotations.Type;
 
 
 @Entity
-public class Product extends ProductBaseModel {
+public class Product extends ProductBaseModel{
 
 
     private String name;
@@ -25,5 +25,6 @@ public class Product extends ProductBaseModel {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private ProductCategory productCategory;
+
 
 }

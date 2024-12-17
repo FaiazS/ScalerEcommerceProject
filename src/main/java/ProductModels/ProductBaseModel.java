@@ -1,8 +1,6 @@
 package ProductModels;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +13,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 
+@MappedSuperclass
+
+@Entity
 public class ProductBaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    public long id;
 
     private Date createdAt;
 

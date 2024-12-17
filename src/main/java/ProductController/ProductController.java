@@ -12,7 +12,7 @@ public class ProductController {
 
     private ProductService productService;
 
-    public ProductController(@Qualifier"SelfProductService") ProductService productService) {
+    private ProductController(@Qualifier("SelfProductService") ProductService productService) {
 
         this.productService = productService;
     }
@@ -32,7 +32,7 @@ public class ProductController {
 
     public Product getSingleProduct(@PathVariable("id") long id){
 
-        return productService.getSingleProduct(id);
+        return productService.getProductById(id);
     }
 
     // Adding a new Product

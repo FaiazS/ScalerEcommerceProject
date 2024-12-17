@@ -42,7 +42,7 @@ public class FakeStoreProductService implements ProductService {
     }
 
     // Retrieving a Single Product from the Catalogue
-
+    @Override
     public Product getProductById(long id){
 
         FakeStoreProductDTO fakeStoreProductDTO = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDTO.class);
@@ -68,7 +68,7 @@ public class FakeStoreProductService implements ProductService {
 
         fakeStoreProductDTO.setImage(addProductDTO.getImage());
 
-        FakeStoreProductDTO testFakeStoreProductDTO = restTemplate.postForObject("https://fakestoreapi.com/products", fakeStoreProductDTO, fakeStoreProductDTO.class);
+        FakeStoreProductDTO testFakeStoreProductDTO = restTemplate.postForObject("https://fakestoreapi.com/products", fakeStoreProductDTO, FakeStoreProductDTO.class);
 
         return testFakeStoreProductDTO.toProduct();
 

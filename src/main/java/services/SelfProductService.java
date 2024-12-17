@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SelfProductService implements ProductService {
+public abstract class SelfProductService implements ProductService {
 
     private ProductRepository productRepository;
 
@@ -18,7 +18,9 @@ public class SelfProductService implements ProductService {
 
     @Override
 
-    public Product getSingleProduct(long id){
+    public Product getProductById(long id){
+
+        return productRepository.findById(id).get();
 
     }
 
