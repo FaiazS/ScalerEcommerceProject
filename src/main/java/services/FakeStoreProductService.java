@@ -54,7 +54,7 @@ public class FakeStoreProductService implements ProductService {
 
     //Adding a New Product in Catalogue
 
-    public Product addProduct(AddProductDTO addProductDTO){
+    public void addProduct(AddProductDTO addProductDTO){
 
         FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
 
@@ -69,8 +69,6 @@ public class FakeStoreProductService implements ProductService {
         fakeStoreProductDTO.setImage(addProductDTO.getImage());
 
         FakeStoreProductDTO testFakeStoreProductDTO = restTemplate.postForObject("https://fakestoreapi.com/products", fakeStoreProductDTO, FakeStoreProductDTO.class);
-
-        return testFakeStoreProductDTO.toProduct();
 
     }
 }

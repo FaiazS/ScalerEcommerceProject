@@ -45,9 +45,9 @@ public class ProductController {
 
     @PostMapping("/products/")
 
-    public Product addProduct(@RequestBody() AddProductDTO addProductDTO){
+    public void addProduct(@RequestBody() AddProductDTO addProductDTO){
 
-        return productService.addProduct(addProductDTO);
+        System.out.println(addProductDTO);
 
     }
 }

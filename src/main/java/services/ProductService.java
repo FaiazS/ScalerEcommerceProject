@@ -13,6 +13,6 @@ public interface ProductService {
 
     Product getProductById(long id);
 
-    Product addProduct(AddProductDTO addProductDTO);
+    void addProduct(AddProductDTO addProductDTO);
 
 }

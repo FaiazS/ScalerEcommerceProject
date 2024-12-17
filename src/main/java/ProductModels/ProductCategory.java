@@ -9,10 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 
 
 
@@ -20,6 +16,14 @@ import java.util.List;
 public class ProductCategory extends ProductBaseModel{
 
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @OneToMany(mappedBy = "productCategory", cascade = CascadeType.REMOVE)
     private List<Product> allProducts;
