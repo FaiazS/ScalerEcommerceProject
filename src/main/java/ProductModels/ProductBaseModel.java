@@ -14,8 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 
 @MappedSuperclass
-
-@Entity
 public class ProductBaseModel {
 
     @Id
