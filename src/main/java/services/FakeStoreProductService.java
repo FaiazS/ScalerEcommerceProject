@@ -54,21 +54,9 @@ public class FakeStoreProductService implements ProductService {
 
     //Adding a New Product in Catalogue
 
-    public void addProduct(AddProductDTO addProductDTO){
+    public Product addProduct(String title,String description, String image, String category, double price){
 
-        FakeStoreProductDTO fakeStoreProductDTO = new FakeStoreProductDTO();
 
-        fakeStoreProductDTO.setTitle(addProductDTO.getTitle());
-
-        fakeStoreProductDTO.setDescription(addProductDTO.getDescription());
-
-        fakeStoreProductDTO.setPrice(addProductDTO.getPrice());
-
-        fakeStoreProductDTO.setCategory(addProductDTO.getCategory());
-
-        fakeStoreProductDTO.setImage(addProductDTO.getImage());
-
-        FakeStoreProductDTO testFakeStoreProductDTO = restTemplate.postForObject("https://fakestoreapi.com/products", fakeStoreProductDTO, FakeStoreProductDTO.class);
 
     }
 }
