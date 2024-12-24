@@ -13,6 +13,6 @@ public interface ProductService {
 
     Product getProductById(long id);
 
-    void addProduct(AddProductDTO addProductDTO);
+    Product addProduct(String title, String description, String image, String category, double price);
 
 }

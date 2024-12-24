@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import services.ProductService;
 import java.util.List;
 
+
 @RestController
 public class ProductController {
 
@@ -43,11 +44,17 @@ public class ProductController {
 
     // see if the method is working as intended
 
-    @PostMapping("/products/")
+    @PostMapping("/products")
 
-    public void addProduct(@RequestBody() AddProductDTO addProductDTO){
+    public Product addProduct(@RequestBody AddProductDTO addProductDTO){
 
-        System.out.println(addProductDTO);
+        productService.addProduct(addProductDTO.getTitle(),
+                                  addProductDTO.getDescription(),
+                                  addProductDTO.getImage(),
+                                  addProductDTO.getCategory(),
+                                  addProductDTO.getPrice());
 
+
+        }
     }
-}
+
