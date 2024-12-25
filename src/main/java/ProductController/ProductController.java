@@ -2,6 +2,7 @@ package ProductController;
 
 import ProductDataTransferObject.AddProductDTO;
 import ProductModels.Product;
+import com.scaler.productservice.Exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import services.ProductService;
@@ -31,7 +32,7 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
 
-    public Product getSingleProduct(@PathVariable("id") long id){
+    public Product getSingleProduct(@PathVariable("id") long id) throws ProductNotFoundException {
 
         return productService.getProductById(id);
     }
@@ -48,13 +49,14 @@ public class ProductController {
 
     public Product addProduct(@RequestBody AddProductDTO addProductDTO){
 
-        productService.addProduct(addProductDTO.getTitle(),
-                                  addProductDTO.getDescription(),
-                                  addProductDTO.getImage(),
-                                  addProductDTO.getCategory(),
-                                  addProductDTO.getPrice());
+        Product product = productService.addProduct(addProductDTO.getTitle(),
+                                                    addProductDTO.getDescription(),
+                                                    addProductDTO.getImage(),
+                                                    addProductDTO.getCategory(),
+                                                    addProductDTO.getPrice());
 
 
-        }
+        return product;
+    }
     }
 

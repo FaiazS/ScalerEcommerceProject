@@ -5,9 +5,11 @@ import ProductModels.Product;
 import ProductModels.ProductCategory;
 import ProductRepository.ProductRepository;
 import ProductRepository.CategoryRepository;
+import com.scaler.productservice.Exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public abstract class SelfProductService implements ProductService {
@@ -26,10 +28,19 @@ public abstract class SelfProductService implements ProductService {
     }
     @Override
 
-    public Product getProductById(long id){
+    public Product getProductById (long id) throws ProductNotFoundException{
 
-        return productRepository.findById(id).get();
+        Optional<Product> optionalProduct = productRepository.findById(id);
 
+        if(optionalProduct.isEmpty()){
+
+            throw new ProductNotFoundException("Product not found");
+        }
+
+        else{
+
+            return optionalProduct.get();
+        }
     }
 
     @Override

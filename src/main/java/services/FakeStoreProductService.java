@@ -57,6 +57,6 @@ public class FakeStoreProductService implements ProductService {
     public Product addProduct(String title,String description, String image, String category, double price){
 
 
-
+        return null;
     }
 }

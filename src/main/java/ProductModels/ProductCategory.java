@@ -1,5 +1,6 @@
 package ProductModels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class ProductCategory extends ProductBaseModel{
         this.name = name;
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "productCategory", cascade = CascadeType.REMOVE)
     private List<Product> allProducts;
 
