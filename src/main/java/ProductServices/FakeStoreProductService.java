@@ -1,13 +1,10 @@
-package services;
+package ProductServices;
 
-import ProductDataTransferObject.AddProductDTO;
 import ProductDataTransferObject.FakeStoreProductDTO;
 import ProductModels.Product;
 import org.springframework.stereotype.Service;
-import RESTConfigurations.RESTTemplates;
 import org.springframework.web.client.RestTemplate;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 

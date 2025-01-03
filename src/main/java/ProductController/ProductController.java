@@ -5,7 +5,7 @@ import ProductModels.Product;
 import com.scaler.ECommerceApplication.Exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-import services.ProductService;
+import ProductServices.ProductService;
 import java.util.List;
 
 

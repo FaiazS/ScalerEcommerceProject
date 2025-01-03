@@ -1,4 +1,4 @@
-package services;
+package ProductServices;
 
 import ProductModels.Product;
 import com.scaler.ECommerceApplication.Exceptions.ProductNotFoundException;
