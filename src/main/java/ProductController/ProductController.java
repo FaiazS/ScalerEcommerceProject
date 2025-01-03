@@ -2,7 +2,7 @@ package ProductController;
 
 import ProductDataTransferObject.AddProductDTO;
 import ProductModels.Product;
-import com.scaler.productservice.Exceptions.ProductNotFoundException;
+import com.scaler.ECommerceApplication.Exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import services.ProductService;

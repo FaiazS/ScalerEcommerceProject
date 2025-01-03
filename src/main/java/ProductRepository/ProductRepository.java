@@ -2,7 +2,7 @@ package ProductRepository;
 
 import ProductModels.Product;
 import ProductModels.ProductCategory;
-import com.scaler.productservice.ProductProjections.GetProductWithIdAndPriceProjection;
+import com.scaler.ECommerceApplication.ProductProjections.GetProductWithIdAndPriceProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

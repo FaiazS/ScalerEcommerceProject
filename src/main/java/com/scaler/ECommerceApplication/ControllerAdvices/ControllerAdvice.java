@@ -1,9 +1,8 @@
-package com.scaler.productservice.ControllerAdvices;
+package com.scaler.ECommerceApplication.ControllerAdvices;
 
 import ProductDataTransferObject.ExceptionHandlingDTO;
-import com.scaler.productservice.Exceptions.ProductNotFoundException;
+import com.scaler.ECommerceApplication.Exceptions.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

@@ -1,4 +1,4 @@
-package com.scaler.productservice.Exceptions;
+package com.scaler.ECommerceApplication.Exceptions;
 
 public class ProductNotFoundException extends Exception {
 

@@ -1,8 +1,7 @@
 package services;
 
-import ProductDataTransferObject.AddProductDTO;
 import ProductModels.Product;
-import com.scaler.productservice.Exceptions.ProductNotFoundException;
+import com.scaler.ECommerceApplication.Exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
