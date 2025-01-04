@@ -31,12 +31,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByProductNameStartingWithAndIDEqualsAndPriceMoreThan(String productName, Long idEquals, Double priceMoreThan);
 
-    @Query("SELECT p.id, p.price FROM Product p WHERE p.productCategory.name = : productCategoryName")
+    @Query("SELECT p.id, p.price FROM Product p WHERE p.productCategory.name = :productCategoryName")
 
     List<GetProductWithIdAndPriceProjection> getProductWithIdAndPriceProjectionOnGivenCategoryName(@Param("productCategoryName") String productCategoryName);
 
 
-    @Query(value = "SELECT p.id, p.price FROM Product p where givenTitle = : givenTitle ", nativeQuery = true)
+    @Query(value = "SELECT p.id, p.price FROM Product p where givenTitle = :givenTitle ", nativeQuery = true)
 
     List<GetProductWithIdAndPriceProjection> getIdAndPricesOfAllProductsWithGivenTitle(@Param("givenTitle") String givenTitle);
 }
