@@ -28,6 +28,7 @@ public class ProductCategory extends ProductBaseModel{
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "productCategory", cascade = CascadeType.REMOVE)
+
     private List<Product> allProducts;
 
 }
