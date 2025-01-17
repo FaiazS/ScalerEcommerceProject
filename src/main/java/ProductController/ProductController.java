@@ -4,6 +4,7 @@ import ProductDataTransferObject.AddProductDTO;
 import ProductModels.Product;
 import com.scaler.ECommerceApplication.Exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ProductServices.ProductService;
 import java.util.List;
@@ -26,6 +27,12 @@ public class ProductController {
     public List<Product> getAllProducts(){
 
         return productService.getAllProducts();
+    }
+
+    @GetMapping("products/paginatedProducts")
+    Page<Product> getPaginatedProducts(@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize){
+
+        return productService.getPaginatedProducts(pageNumber, pageSize);
     }
 
     // Getting ID of A Single Product

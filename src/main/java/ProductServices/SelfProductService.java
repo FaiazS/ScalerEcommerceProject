@@ -5,6 +5,9 @@ import ProductModels.ProductCategory;
 import ProductRepository.ProductRepository;
 import ProductRepository.CategoryRepository;
 import com.scaler.ECommerceApplication.Exceptions.ProductNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,6 +52,12 @@ public abstract class SelfProductService implements ProductService {
         List<Product> products = productRepository.findAll();
 
         return products;
+    }
+
+    public Page<Product> getPaginatedProducts(int pageNumber, int pageSize) { //ProductController Class will provide page number and page size.
+
+           return productRepository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by("name").ascending().and(Sort.by("price").descending())));
+
     }
 
     @Override
