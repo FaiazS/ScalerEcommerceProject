@@ -2,6 +2,7 @@ package ProductServices;
 
 import ProductDataTransferObject.FakeStoreProductDTO;
 import ProductModels.Product;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,14 +11,17 @@ import java.util.List;
 
 @Service
 
-public class FakeStoreProductService implements ProductService {
+public abstract class FakeStoreProductService implements ProductService {
 
     private RestTemplate restTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate<String, Object> redisTemplate) {
 
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
+
 
     @Override
 
@@ -42,9 +46,22 @@ public class FakeStoreProductService implements ProductService {
     @Override
     public Product getProductById(long id){
 
+        Product cachedProduct = (Product) redisTemplate.opsForHash().get("Products","Products_" + id);
+
+        if(!cachedProduct.equals(null)){
+
+            return cachedProduct;
+
+        }
+
         FakeStoreProductDTO fakeStoreProductDTO = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProductDTO.class);
 
-        return fakeStoreProductDTO.toProduct();
+        Product retrievedProduct = fakeStoreProductDTO.toProduct();
+
+        redisTemplate.opsForHash().put("Products","Products" + id, retrievedProduct);
+
+        return retrievedProduct;
+
     }
 
     @Override
