@@ -1,7 +1,5 @@
 # Java E-Commerce Backend | Product Catalog & Payment Integration
 
-**A career transition into software engineering, built one backend layer at a time.**
-
 I bring a business education and more than five years of experience in e-commerce operations and technical support. That experience gave me a practical view of the problems behind online commerce: product information, seller workflows, customer issues, and the importance of dependable systems. I’m now applying that operational perspective to software engineering—building with Java, Spring Boot, REST APIs, data modeling, persistence, caching, and payment-provider SDKs.
 
 This portfolio project explores the backend foundations of an e-commerce experience. The product catalog and payment integration are maintained in **two separate repositories**, so their current scope and connection are described explicitly below.
