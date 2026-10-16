@@ -1,163 +1,120 @@
-# Java E-Commerce Backend Portfolio
+# Java E-Commerce Backend | Product Catalog & Payment Integration
 
-A backend engineering portfolio project exploring the foundations of an e-commerce platform: REST API design, product catalog modeling, pagination and sorting, relational persistence, external catalog integration, caching concepts, and payment-link integrations.
+**A career transition into software engineering, built one backend layer at a time.**
 
-The work is split across two repositories:
+I bring a business education and more than five years of experience in e-commerce operations and technical support. That experience gave me a practical view of the problems behind online commerce: product information, seller workflows, customer issues, and the importance of dependable systems. I’m now applying that operational perspective to software engineering—building with Java, Spring Boot, REST APIs, data modeling, persistence, caching, and payment-provider SDKs.
 
-- **Product catalog service:** [ScalerEcommerceProject](https://github.com/FaiazS/ScalerEcommerceProject/tree/master)
-- **Separate payment integration prototype:** [PaymentGateWayIntegration](https://github.com/FaiazS/PaymentGateWayIntegration/tree/master)
+This portfolio project explores the backend foundations of an e-commerce experience. The product catalog and payment integration are maintained in **two separate repositories**, so their current scope and connection are described explicitly below.
 
-This is an independent learning project inspired by common e-commerce systems. It is not affiliated with Amazon or any payment provider.
+- **Product catalog:** [ScalerEcommerceProject — source on master](https://github.com/FaiazS/ScalerEcommerceProject/tree/master)
+- **Payment-link prototype:** [PaymentGateWayIntegration — source on master](https://github.com/FaiazS/PaymentGateWayIntegration/tree/master) · [Payment repository README](https://github.com/FaiazS/PaymentGateWayIntegration/blob/master/README.md)
 
-## Project at a glance
+> Independent learning projects inspired by common e-commerce workflows. They are not affiliated with or endorsed by Amazon, Razorpay, or Stripe.
 
-| Area | What the source demonstrates |
+## The engineering story
+
+I approached this project as a way to turn real-world e-commerce context into backend engineering practice. The product service explores how an API can expose catalog operations through a controller, delegate work to service abstractions, model product and category data, and use repositories for persistence. A separate project explores the payment-provider boundary: accepting an order reference and generating hosted payment links through Razorpay and Stripe SDKs.
+
+That work has helped me practice an essential backend habit: separating responsibilities and asking what a system must guarantee when data, external services, and money are involved. The repositories are learning prototypes, and I have documented the implementation boundaries and next steps rather than presenting unfinished integrations as production features.
+
+## What the source demonstrates
+
+| Engineering area | Evidence in the repositories |
 |---|---|
-| Backend framework | Java 17 and Spring Boot |
-| API design | Spring MVC REST controllers and request DTOs |
-| Catalog domain | Product and category entities, with a many-to-one product/category relationship |
-| Data access | Spring Data JPA repositories backed by MySQL configuration |
-| Catalog operations | Product lookup, listing, creation, and paginated/sorted retrieval in the service layer |
-| External API exploration | FakeStoreAPI product retrieval adapter |
-| Caching exploration | Redis template configuration and a cache path in the FakeStore adapter |
-| Payment integration prototype | Separate Spring application with Razorpay and Stripe SDK integrations that generate payment links |
+| Java backend development | Java 17 and Spring Boot applications |
+| REST APIs | Spring MVC controllers, request DTOs, and product/payment endpoints |
+| Domain modeling | JPA product and category entities with a many-to-one relationship |
+| Persistence | Spring Data JPA repositories and MySQL configuration in the product service |
+| Catalog operations | Product retrieval, creation, pagination, sorting, and not-found handling in the source |
+| External services | FakeStoreAPI adapter code and separate Razorpay/Stripe SDK integration code |
+| Caching concepts | Redis configuration and a cache path in the FakeStore product adapter |
+| System boundaries | Separate product-catalog and payment-link repositories |
 
 ## Product catalog service
 
-The main repository is a Spring Boot product service. Its code is organized around controllers, DTOs, domain models, repositories, and service abstractions.
+The main repository is a Java 17 / Spring Boot product service. Its source is organized into REST controllers, DTOs, models, repositories, service abstractions, and application-level exception handling.
 
-### Catalog capabilities represented in the source
+### Catalog operations represented in the code
 
-- Retrieve products and look up a product by ID.
-- Create a product from a request DTO, associating it with an existing category or creating the category when needed.
-- Retrieve a paginated product collection ordered by product name and price.
+- List products and retrieve a product by ID.
+- Accept a product-creation request and associate the product with an existing category or a new category.
+- Retrieve paginated products with name and price sorting.
 - Persist product and category entities through Spring Data JPA repositories.
-- Map a product-not-found exception to an HTTP 404 response.
-- Call FakeStoreAPI for product data through a separate adapter implementation.
-- Configure a Redis template and explore caching for individual products in the external-catalog adapter.
+- Return an HTTP 404 response for the product-not-found exception.
+- Explore external product retrieval through a FakeStoreAPI adapter.
+- Configure Redis and explore caching within that adapter.
+
+**Persistence detail:** the product repository in the reviewed source uses Spring Data JPA with MySQL configuration. Although the payment repository includes JDBC dependencies, the catalog code reviewed here is not a JDBC repository implementation.
 
 ### Request flow
 
 ```mermaid
 flowchart LR
     Client[HTTP client] --> Controller[ProductController]
-    Controller --> Service[ProductService abstraction]
-    Service --> JPA[SelfProductService implementation]
-    JPA --> Repo[Spring Data JPA repositories]
-    Repo --> DB[(MySQL)]
-    Adapter[FakeStoreProductService adapter] --> API[FakeStoreAPI]
-    Adapter --> Cache[(Redis template)]
+    Controller --> ProductService[ProductService abstraction]
+    ProductService --> SelfService[SelfProductService source]
+    SelfService --> Repository[Spring Data JPA repositories]
+    Repository --> MySQL[(MySQL)]
+    FakeStoreAdapter[FakeStoreProductService source] --> FakeStore[FakeStoreAPI]
+    FakeStoreAdapter --> Redis[(Redis template)]
 ```
 
-The controller currently selects the `SelfProductService` qualifier. The FakeStoreAPI and Redis code live in a separate service adapter; they should be treated as an integration experiment in the current source, not as a verified part of the controller''s active request path.
+The product controller selects the `SelfProductService` qualifier. The FakeStoreAPI adapter and Redis cache path are separate source code and should not be read as the active controller flow in the current branch.
 
-### Current controller mappings
+### Routes declared by the controller
 
-The controller declares a class-level `/products` mapping and repeats `/products` in its method mappings. As written, the routes are:
+The class-level mapping and method-level mappings both include `/products`, so the current declared paths contain a repeated segment:
 
-| Method | Route | Purpose |
+| Method | Current route | Operation |
 |---|---|---|
 | GET | `/products/products` | List products |
-| GET | `/products/products/paginatedProducts?pageNumber={n}&pageSize={n}` | Return a page of products |
-| GET | `/products/products/{id}` | Retrieve one product |
+| GET | `/products/products/paginatedProducts?pageNumber={n}&pageSize={n}` | Paginated product list |
+| GET | `/products/products/{id}` | Retrieve a product |
 | POST | `/products/products` | Create a product |
 
-A cleanup pass could remove the repeated segment to produce the more conventional `/products` route family.
+Normalizing the duplicate prefix is a clear next API cleanup.
 
-## Separate payment integration repository
+## Separate payment integration
 
-Payment work is in its own Spring Boot application: [PaymentGateWayIntegration](https://github.com/FaiazS/PaymentGateWayIntegration/tree/master). It contains a `POST /payments` controller that accepts an order ID and delegates to Razorpay or Stripe payment-link generation code.
+Payment-provider code lives in the standalone [PaymentGateWayIntegration repository](https://github.com/FaiazS/PaymentGateWayIntegration/tree/master), with its own [implementation-focused README](https://github.com/FaiazS/PaymentGateWayIntegration/blob/master/README.md).
 
-The current controller alternates providers based on an in-memory request counter. The Razorpay example constructs a demo INR payment link with a fixed amount and an expiry; the Stripe example creates a recurring-price/payment-link flow. These are provider-integration prototypes, not a production order-payment system. The payment repository is separate and is not wired into the product service''s checkout flow in the code reviewed here.
+The source exposes `POST /payments`, accepts an `orderId`, and delegates to provider-specific payment-link code:
 
-### Payment request shape
+- **Razorpay path:** constructs a demo INR payment-link request with a fixed amount, order reference, and expiry.
+- **Stripe path:** explores creating a recurring INR price and a hosted payment link.
+- **Provider selection:** currently alternates between providers using an in-memory request counter.
 
-```json
-{
-  "orderId": 123
-}
-```
-
-The response is currently the provider SDK''s payment-link representation. The request and response contracts, provider selection, amount calculation, and order lifecycle need further refinement before these repositories can be described as a complete checkout integration.
+These are payment-link integration experiments. The payment repository is **not currently connected** to the product service’s catalog, cart, or order lifecycle, and the source does not demonstrate an end-to-end checkout. The README and code link above let reviewers inspect the implementation directly.
 
 ## Technology
 
-- **Java 17**
-- **Spring Boot / Spring MVC**
-- **Spring Data JPA**
-- **MySQL**
-- **Redis** (configuration and adapter-level cache exploration)
-- **FakeStoreAPI**
-- **Razorpay Java SDK**
-- **Stripe Java SDK**
-- **Maven**
-- **Postman** for manual API exploration
+- Java 17
+- Spring Boot and Spring MVC
+- Spring Data JPA and MySQL (product-service source)
+- Redis configuration and adapter-level cache exploration
+- FakeStoreAPI
+- Razorpay Java SDK and Stripe Java SDK (separate payment project)
+- Maven
 
-## Engineering concepts demonstrated
+## What I’m learning to build next
 
-- Separating HTTP concerns, request DTOs, service logic, persistence, and domain models.
-- Modeling product and category relationships with JPA.
-- Designing repository interfaces and derived query methods.
-- Supporting pagination and deterministic sorting for catalog queries.
-- Integrating an external REST API and translating its DTOs into application models.
-- Exploring Redis-backed reads and thinking about cache behavior.
-- Exploring payment-provider SDKs and payment-link creation.
-- Identifying the boundaries between a catalog service and a payment service.
+The next iteration is about turning the separate learning pieces into a reliable, testable system:
 
-## Repository layout
+1. Make the Spring service implementations concrete and confirm application startup.
+2. Normalize the product routes and document request and response examples.
+3. Choose and wire an explicit source of truth for product data.
+4. Make Redis cache misses null-safe, align cache keys, and define expiration/invalidation.
+5. Load payment credentials securely and remove personal data from payment fixtures.
+6. Select payment providers explicitly rather than by request order.
+7. Derive payment amounts from persisted orders and connect payment status to an order lifecycle.
+8. Add signed webhook verification, idempotency, and automated tests before treating the payment flow as production-ready.
 
-### `ScalerEcommerceProject`
+The payment source currently contains a committed test credential and personal customer details. Those should be removed and the credential rotated before the repository is shared further. No secrets or personal values are reproduced in this README.
 
-```text
-src/main/java/
-├── AppConfigurations/       # REST client and Redis configuration
-├── ProductController/       # Product REST endpoints
-├── ProductDataTransferObject/
-├── ProductModels/           # Product and category entities
-├── ProductRepository/       # Spring Data repositories
-├── ProductServices/         # Service abstraction and adapters
-└── com/scaler/ECommerceApplication/
-    ├── ControllerAdvices/
-    ├── Exceptions/
-    └── ProductProjections/
-```
+## About
 
-### `PaymentGateWayIntegration`
+My transition from business and e-commerce operations into software engineering is grounded in curiosity, structured problem-solving, and consistent hands-on learning. This project lets me connect the workflows I have supported professionally with the technical foundations behind backend services—and gives hiring teams a direct view of how I think about APIs, data, integrations, and system reliability.
 
-```text
-src/main/java/com/scaler/paymentgatewayintegration/
-├── PaymentConfigurations/
-├── PaymentContollers/
-├── PaymentDTOS/
-└── PaymentServices/
-```
+**Explore the code:** [Product catalog service](https://github.com/FaiazS/ScalerEcommerceProject/tree/master) · [Separate Razorpay and Stripe payment integration](https://github.com/FaiazS/PaymentGateWayIntegration/tree/master)
 
-## Setup and configuration
 
-Both repositories use Maven wrappers and target Java 17. The product service configuration expects a local MySQL database named `PRODUCTS`; the source also includes Redis dependencies and configuration. The payment application requires provider credentials.
-
-**Do not commit API keys, payment secrets, passwords, or personal customer data.** Load sensitive values from environment variables or a local ignored configuration file. Before sharing or deploying the payment repository, rotate any credential that has ever been committed and replace sample customer details with non-personal test data.
-
-The current source should be treated as a learning prototype pending a run-readiness pass. In particular, service classes marked abstract are injected as concrete Spring dependencies, and the Razorpay configuration/credential placeholders need correction. I have therefore not included unverified run commands or implied that either application has been successfully built from this branch.
-
-## Current scope and next engineering steps
-
-This repository is a focused backend learning project rather than a complete Amazon-like commerce platform. In the reviewed `master` source, the implemented catalog endpoints cover products; cart, customer, purchase, and checkout endpoints are not present in this repository, and payment integration remains in its separate project.
-
-A strong next iteration would:
-
-1. Make the service implementations concrete and confirm application context startup.
-2. Correct the duplicated product route prefix and publish request/response examples.
-3. Decide whether the catalog is database-backed or FakeStore-backed, then wire one explicit source of truth.
-4. Repair cache key consistency and null-safe cache misses; define expiration and invalidation behavior.
-5. Move payment keys and customer details to secure configuration and test-mode fixtures.
-6. Replace request-counter provider selection with explicit configuration or a payment strategy.
-7. Calculate payment amount from a persisted order instead of a fixed demo value.
-8. Connect payment status to an order lifecycle with verified callbacks/webhooks and idempotency.
-9. Add automated unit/integration coverage and a repeatable latency benchmark before publishing performance claims.
-
-## About this project
-
-Built as part of a transition into software engineering, this project applies structured problem-solving to practical backend topics: APIs, object-oriented modeling, persistence, integrations, caching, and payment workflows. The separate repositories make the product-catalog work and payment-provider experiments easy to inspect independently.
-
-**Explore the source:** [Product catalog service](https://github.com/FaiazS/ScalerEcommerceProject/tree/master) · [Razorpay and Stripe payment-link prototype](https://github.com/FaiazS/PaymentGateWayIntegration/tree/master)
